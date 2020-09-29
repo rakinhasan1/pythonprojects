@@ -1,5 +1,4 @@
 import pygame
-#import sudokosolver
 from math import *
 
 class Grid:
@@ -16,10 +15,7 @@ class Grid:
     def drawGrid(self):     #draw the puzzle
         for i in range(len(self.board)):
             for k in range(len(self.board[i])):
-                # pygame.draw.rect(win, (0, 0, 0),(i*60,k*60,60,60))
-                # pygame.draw.rect(win,board[i][k],(i*50+(5*i),k*50+(5*k),50,50))
                 pygame.draw.rect(self.window, (0, 0, 0), (k * 60, i * 60, 60, 60))
-                # pygame.draw.rect(win, (255,255,255), (k * 50 + (5 * k), i * 50 + (5 * i), 50, 50))
                 pygame.draw.rect(self.window, self.colorboard[i][k], (k * 60 + 10, i * 60 + 10, 40, 40))
                 font = pygame.font.Font('freesansbold.ttf', 12)
 
@@ -122,29 +118,6 @@ while run:
             run = False
     win.fill((255, 255, 255))
     g.drawGrid()
-    '''
-    for i in range(9):
-        for k in range(9):
-            #pygame.draw.rect(win, (0, 0, 0),(i*60,k*60,60,60))
-            #pygame.draw.rect(win,board[i][k],(i*50+(5*i),k*50+(5*k),50,50))
-            pygame.draw.rect(win, (0,0,0), (k*60,i*60,60,60))
-            #pygame.draw.rect(win, (255,255,255), (k * 50 + (5 * k), i * 50 + (5 * i), 50, 50))
-            pygame.draw.rect(win, (255,255,255), (k *60+10, i * 60 +10, 40, 40))
-            font = pygame.font.Font('freesansbold.ttf', 12)
-
-            # create a text suface object,
-            # on which text is drawn on it.
-            text = font.render((str)(board[i][k]), True, (0, 0, 0), (255, 255, 255))
-
-            # create a rectangular object for the
-            # text surface object
-            textRect = text.get_rect()
-
-            # set the center of the rectangular object.
-            textRect.center = (k*60+30, i*60+30)
-
-            win.blit(text, textRect)
-            '''
     #right click mouse to solve the maze
     if pygame.mouse.get_pressed()[0]:
         g.solveSoduko(g.board,len(g.board))
