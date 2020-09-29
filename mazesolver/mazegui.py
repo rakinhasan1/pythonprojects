@@ -40,22 +40,20 @@ class Grid:
     def drawGrid(self):         #general method to draw the grid
         for i in range(len(self.board)):
             for k in range(len(self.board[i])):
-                # pygame.draw.rect(win, (0, 0, 0),(i*60,k*60,60,60))
-                # pygame.draw.rect(win,board[i][k],(i*50+(5*i),k*50+(5*k),50,50))
+
                 pygame.draw.rect(self.window, (0, 0, 0), (k * 50, i * 50, 50, 50))  #in each square have a big black rectangle to serve as a border
-                # pygame.draw.rect(win, (255,255,255), (k * 50 + (5 * k), i * 50 + (5 * i), 50, 50))
+
                 pygame.draw.rect(self.window, self.colorboard[i][k], (k * 50 + 10, i * 50 + 10, 30, 30))#then fill with the appropriate color from color board
 
     def distance(p1, p2):       #method to calculate distance between two points
         distx = (int)(abs(p1[0] - p2[0]))
         disty = (int)(abs(p1[1] - p2[1]))
-        # print(distx)
-        # print(disty)
         if distx > disty:
             return 14 * disty + 10 * (distx - disty)
         return 14 * distx + 10 * (disty - distx)
 
     def getNeighbors(self, n):      #method to get all empty neighbors, returns them in a list
+        #these arrays store the movement patterns that are allowed in the maze
         #arr1 = [1, -1, 0, 0, 1, -1, 1, -1]
         #arr2 = [1, -1, 1, -1, 0, 0, -1, 1]
         arr1=[1,-1,0,0]
@@ -78,19 +76,14 @@ class Grid:
 
     def findPath(self,start,target):    #finds a path given a start and target
         open=PriorityQueue()    #have a priority cue of open nodes sorted based on lowest fcost
-        #openset=[]
         closed=[]           #have a list of closed nodes to determine which have already been visited
         begin=Node(start)
         begin.hcost=Grid.distance(start,target)     #only need to initialize hcost, gcost is 0 because it is the starting node
         open.put(begin)
         finish=Node((target))
         while not open.empty():     #while open there are still open nodes
-            #PathFinder.printOpenNodes(open)
             current=open.get()      #get the lowest fcost node
             closed.append(current)      #put it in closed because it has been visited already
-            #print(current.position)
-            #print("Current: " + (str)(current.position) + " " + (str)(current.gcost) + " " + (str)(
-            #    current.hcost) + " " + (str)(current.fcost()))
             if current == finish:       #once finished reset all the colors
                 while not open.empty():
                     eval=open.get()
@@ -108,7 +101,6 @@ class Grid:
                 self.drawGrid()
                 pygame.display.update()
             for neighbor in self.getNeighbors(current):     #get the neighbors
-                #print(neighbor.position)
                 if neighbor in closed:          #if a neighbor has already been visited, don't evaluate it
                     continue
                 if self.colorboard[neighbor.position[1]][neighbor.position[0]]==(255,255,255): #make a potentisl neighbor dark green
@@ -126,13 +118,11 @@ class Grid:
                         proxyNeighbor=eval      #if the neighbor is already in the queue
                     else:
                         other.put(eval)
-                #print(foundNeighbor)
                 #if the neighbor is already in the priority queue, make sure you get to it in the most efficient way possible
                 if newDistanceToNeighbor<proxyNeighbor.gcost or not foundNeighbor:
                     neighbor.hcost = Grid.distance((neighbor.position), target)
                     neighbor.gcost=newDistanceToNeighbor
                     neighbor.parent=current #set parent to be along the most efficient path
-                    #print("Neighbor: "+(str)(neighbor.position)+" "+(str)(neighbor.gcost)+" "+(str)(neighbor.hcost)+" "+(str)(neighbor.fcost()))
                     other.put(neighbor)
                 else:
                     other.put(proxyNeighbor)    #if a better path to neighbor already existed in the queue, keep it
@@ -152,11 +142,8 @@ class Grid:
     def drawPath(self,start,end):       #creates green colors across the path
         if start==end:
             return
-        #print(start.position)
-
         col=start.position[0]
         row=start.position[1]
-        #self[row][col]="6"
         self.colorboard[row][col]= (90,200,0)   #make the path light green
         self.drawGrid()
         pygame.display.update()
